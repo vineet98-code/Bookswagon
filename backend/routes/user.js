@@ -9,7 +9,7 @@ var router = express.Router();
 
 // GET current user 
 router.get('/', auth.verifyToken,  async (req, res, next) => {
-    console.log(req.user);
+    // console.log(req.user);
     try {
     let user = await User.findById(req.user.userId);
     console.log(user);

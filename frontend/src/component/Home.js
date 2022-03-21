@@ -18,20 +18,17 @@ export default function Home() {
   };
 
   const [bookDetails, setBookDetails] = useState(bookDetailsInitialState);
-  // const [searchterm, setSearchterm] = useState("")
+
 
   const { bookPerPage, activePageIndex, activeTag, activeNav } = bookDetails
 
   let { user } = useContext(UserContext);
 
-  // const searchHandler = (searchterm) => {
-  //   console.log(searchterm)
 
-  // }
   useEffect(() => {
     const tag = activeTag;
-    
-  fetch(BOOKS_URL + (tag && `&tag=${tag}`),
+
+    fetch(BOOKS_URL + (tag && `&tag=${tag}`),
       {
         method: 'GET',
         headers: {
@@ -72,19 +69,19 @@ export default function Home() {
       };
     });
   };
+  
 
-
-  return (
+return (
     <main>
-      <Banner />
+      {/* <Banner  /> */}
       <div className="px-40">
         <div className="flex">
           <div className="w-3/12 ml-12 mt-9">
             <Tags addTagTab={addTagTab} activeNav={activeNav} />
           </div>
           <div className="w-8/12">
-            <Posts {...bookDetails}
-              
+            <Posts {...bookDetails} 
+
             /></div>
         </div>
 

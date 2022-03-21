@@ -6,10 +6,12 @@ var Schema = mongoose.Schema;
 var bookSchema = new Schema({
     name:   { type: String, require: true },
     description : {type: String,  required: true},
-    author: { type: String, required: true },
+    writer : {type: String,  required: true},
+
+    // author: { type: String, required: true },
     tagList: [{type: String}],
     price : {type: Number, required: true},
-    image: {type: String, required: true},
+    image: {type: String},
     available: {type: Boolean},
 
 }, { timestamps: true }
@@ -26,7 +28,8 @@ bookSchema.methods.toJSONFor = function(user) {
       image: this.image,
       tagList: this.tagList,
       available: this.available,
-      author: this.author,
+      // author: this.author,
+      writer: this.writer
     
   };
 };

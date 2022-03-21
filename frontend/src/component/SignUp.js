@@ -41,12 +41,12 @@ function SignUp(props) {
             body: JSON.stringify({ username: credential.username, email: credential.email, password: credential.password })
         })
         
-        const json = await response.json();
+        const user = await response.json();
         // console.log(json);
-        if(json){
-          updateUser(json)
-          setCredential(json)
-            localStorage.setItem("token", json.token);
+        if(user){
+          updateUser(user)
+          setCredential(user)
+            localStorage.setItem("token", user.token);
             history.push('/');
         } 
         

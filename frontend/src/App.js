@@ -20,41 +20,40 @@ function App(props) {
   const [isUserLogged, setIsUserLogged] = useState(false);
   const [userVerifying, setUserVerifying] = useState(false);
 
-  const updateUser = (user) => {
+  useEffect(() => {
+    let token = localStorage.getItem(LocalStorageKey);
+    console.log(token);
+
+      fetch(CURRENT_USER_URL, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${token}`,
+        },
+      })
+        .then((res) => {
+          if (!res.ok) {
+            return res.json().then((errors) => Promise.reject(errors));
+          }
+          return res.json();
+        })
+        .then((user) => {
+          setUser(user);
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
+    
+  }, [])
+
+ const updateUser = (user) => {
     setUser(user);
     setIsUserLogged(true);
     setUserVerifying(true);
     localStorage.setItem(LocalStorageKey, user.token);
   };
 
-  useEffect(() => {
-    let token = localStorage.getItem(LocalStorageKey);
-    console.log(token);
-
-    fetch(CURRENT_USER_URL, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return res.json().then((errors) => Promise.reject(errors));
-        }
-        return res.json();
-      })
-      .then((user) => {
-        setUser(user.user);
-      })
-      .catch((errors) => {
-        console.log(errors);
-      });
-
-  }, [])
-
-  
-  if (userVerifying) {
+   if (userVerifying) {
     <Loader />
   }
 

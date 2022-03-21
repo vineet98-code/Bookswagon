@@ -10,10 +10,10 @@ router.post('/', auth.verifyToken, async (req, res, next) => {
     try {
         
         req.body.author = req.user.userId;
-
+        // console.log(req.body.author)
         const book = await Book.create(req.body);
 
-        var bookData = await Book.findOne({ _id: book._id }).populate("author","username email following" ).exec();
+        var bookData = await Book.findOne({ _id: book._id }).exec();
             
             return res.json({ 
                 book: bookData.toJSONFor() })

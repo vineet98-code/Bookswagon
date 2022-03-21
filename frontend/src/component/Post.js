@@ -7,7 +7,7 @@ function Post(props) {
 
   const { user } = useContext(UserContext);
 
-  let { author, name, description, tagList, id, image } = props;
+  let { writer, name, description, tagList, id, image } = props;
   if (error)
     return <p className="text-3xl text-center mt-4 text-red-500">{error}</p>;
   return (
