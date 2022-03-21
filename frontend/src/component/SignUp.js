@@ -8,9 +8,9 @@ import { useHistory } from 'react-router-dom'
 
 function SignUp(props) {
 
-  const [credential, setCredential] = useState({ username: '', email: "", password: "",
+  const [credential, setCredential] = useState({ username: 'manu', email: "manu@gmail.com", password: "manu1",
     errors: {
-      username: '',
+      username:'',
       email: '',
       password: '',
     }
@@ -30,46 +30,27 @@ function SignUp(props) {
     });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    let data = {
-      user: {
-        username: username,
-        email: email,
-        password: password,
-      },
-    };
-
-    fetch(SIGNUp_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return res.json().then((errors) => {
-            return Promise.reject(errors);
-          });
-        }
-        return res.json();
-      })
-      .then((user) => {
-        console.log(user);
-        updateUser(user.user);
-        setCredential(user);
-        history.push('/login');
-      })
-      .catch((errors) =>
-        setCredential((user) => {
-          return {
-            ...user,
-            errors
-          };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Api call
+        const response = await fetch(SIGNUp_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: credential.username, email: credential.email, password: credential.password })
         })
-      );
-  };
+        
+        const json = await response.json();
+        // console.log(json);
+        if(json){
+          updateUser(json)
+          setCredential(json)
+            localStorage.setItem("token", json.token);
+            history.push('/');
+        } 
+        
+    }
 
   return (
     <main>

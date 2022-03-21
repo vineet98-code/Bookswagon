@@ -8,9 +8,10 @@ import SignUp from './component/SignUp';
 import NoMatch from './component/NoMatch';
 import SingleBook from './component/SingleBook';
 import UserContext from './component/UserContext';
-import {LocalStorageKey, CURRENT_USER_URL } from './utils/Constant'
+import { LocalStorageKey, CURRENT_USER_URL } from './utils/Constant'
 import Setting from './component/Setting';
 import Profile from './component/Profile';
+import AddBook from './component/AddBook';
 
 
 function App(props) {
@@ -19,59 +20,59 @@ function App(props) {
   const [isUserLogged, setIsUserLogged] = useState(false);
   const [userVerifying, setUserVerifying] = useState(false);
 
-  useEffect(() => {
-    let token = localStorage.getItem(LocalStorageKey);
-    console.log(token);
-      fetch(CURRENT_USER_URL, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Token ${token}`,
-        },
-      })
-        .then((res) => {
-          if (!res.ok) {
-            return res.json().then((errors) => Promise.reject(errors));
-          }
-          return res.json();
-        })
-        .then((user) => {
-          setUser(user.user);
-        })
-        .catch((errors) => {
-          console.log(errors);
-        });
-    
-  }, [])
-
- const updateUser = (user) => {
+  const updateUser = (user) => {
     setUser(user);
     setIsUserLogged(true);
     setUserVerifying(true);
     localStorage.setItem(LocalStorageKey, user.token);
   };
 
-   if (userVerifying) {
+  useEffect(() => {
+    let token = localStorage.getItem(LocalStorageKey);
+    console.log(token);
+
+    fetch(CURRENT_USER_URL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          return res.json().then((errors) => Promise.reject(errors));
+        }
+        return res.json();
+      })
+      .then((user) => {
+        setUser(user.user);
+      })
+      .catch((errors) => {
+        console.log(errors);
+      });
+
+  }, [])
+
+  
+  if (userVerifying) {
     <Loader />
   }
 
   return (
     <div>
-      {/* <ErrorBoundary> */}
+      <UserContext.Provider
+        value={{ user: user, isUserLogged: isUserLogged, updateUser: updateUser, userVerifying: userVerifying }}>
 
-        <UserContext.Provider
-          value={{user:user, isUserLogged: isUserLogged, updateUser: updateUser, userVerifying: userVerifying }}>
+        <Header />
 
-          <Header />
+        {isUserLogged ? (
+          <AuthenticatedApp />
+        ) : (
+          <UnAuthenticatedApp />
+        )}
 
-          {isUserLogged ? (
-            <AuthenticatedApp />
-          ) : (
-            <UnAuthenticatedApp />
-          )}
+      </UserContext.Provider>
 
-        </UserContext.Provider>
-      {/* </ErrorBoundary> */}
     </div>
 
   );
@@ -86,11 +87,13 @@ function AuthenticatedApp(props) {
       <Route path="/books/:id">
         <SingleBook />
       </Route>
-      
+      <Route path="/new-book">
+        <AddBook />
+      </Route>
       <Route path="/setting">
         <Setting />
       </Route>
-      <Route path="/profile/:username" exact>
+      <Route path="/profile/:username" >
         <Profile />
       </Route>
       <Route path="*">
@@ -108,10 +111,10 @@ function UnAuthenticatedApp(props) {
       <Route path="/books/:id">
         <SingleBook />
       </Route>
-      <Route path="/login">
+      <Route exact path="/login">
         <Login />
       </Route>
-      <Route path="/register">
+      <Route exact path="/register">
         <SignUp />
       </Route>
 

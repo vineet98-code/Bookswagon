@@ -18,30 +18,24 @@ export default function Home() {
   };
 
   const [bookDetails, setBookDetails] = useState(bookDetailsInitialState);
-  const [searchterm, setSearchterm] = useState("")
+  // const [searchterm, setSearchterm] = useState("")
 
   const { bookPerPage, activePageIndex, activeTag, activeNav } = bookDetails
 
   let { user } = useContext(UserContext);
 
-   const searchHandler = (searchterm) => {
-     console.log(searchterm)
-     
-   }
+  // const searchHandler = (searchterm) => {
+  //   console.log(searchterm)
+
+  // }
   useEffect(() => {
-    const limit = bookPerPage;
-    const offset = activePageIndex * 10;
     const tag = activeTag;
-    let feed = activeNav === 'your' ? '/feed' : '';
-    let token = user ? 'Token ' + user.token : '';
-
-
-    fetch(BOOKS_URL + `/${feed}/?limit=${limit}&offset=${offset}` + (tag && `&tag=${tag}`),
+    
+  fetch(BOOKS_URL + (tag && `&tag=${tag}`),
       {
         method: 'GET',
         headers: {
           'Conten-Type': 'application/json',
-          Authorization: token,
         }
       })
       .then((res) => {
@@ -65,7 +59,7 @@ export default function Home() {
           };
         })
       );
-  }, [activePageIndex,bookPerPage, user, activeTag, activeNav]);
+  }, [activePageIndex, bookPerPage, user, activeTag, activeNav]);
 
 
   const addTagTab = (tag) => {
@@ -79,7 +73,7 @@ export default function Home() {
     });
   };
 
-  
+
   return (
     <main>
       <Banner />
@@ -89,12 +83,11 @@ export default function Home() {
             <Tags addTagTab={addTagTab} activeNav={activeNav} />
           </div>
           <div className="w-8/12">
-            <Posts {...bookDetails} 
-                  searchterm={searchterm}
-                  searchkeywords={searchHandler}
-                /></div>
+            <Posts {...bookDetails}
+              
+            /></div>
         </div>
-       
+
       </div>
     </main>
   );

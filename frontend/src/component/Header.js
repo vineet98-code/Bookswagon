@@ -53,8 +53,8 @@ function AuthHeader(props) {
         </NavLink>
       </button>
       <button className="text-primary ml-6">
-        <NavLink activeClassName="active" to="/new-post">
-          <i className="fas fa-edit"></i>New Books
+        <NavLink activeClassName="active" to="/new-book">
+          <i className="fas fa-edit"></i>Add Books
         </NavLink>
       </button>
       <button className="text-primary ml-6">

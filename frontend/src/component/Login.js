@@ -2,8 +2,9 @@ import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import validate from '../utils/Validate';
-import { LOGIN_URL } from '../utils/Constant';
 import UserContext from './UserContext';
+import { LOGIN_URL } from '../utils/Constant';
+import { useHistory } from 'react-router-dom'
 
 function Login(props) {
 
@@ -16,7 +17,7 @@ function Login(props) {
     } });
 
   let { email, password, errors } = credential
-
+  let history = useHistory();
   let { updateUser } = useContext(UserContext);
 
   const handleChange = (event) => {
@@ -27,43 +28,25 @@ function Login(props) {
     });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    let data = {
-      user: {
-        email: email,
-        password: password,
-      },
-    };
-    fetch(LOGIN_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return res.json().then((errors) => {
-            return Promise.reject(errors);
-          });
-        }
-        return res.json();
-      })
-      .then((user) => {
-        updateUser(user.user);
-        setCredential(user);
-        props.history.push('/');
-      })
-      .catch((errors) =>
-      setCredential((user) => {
-          return {
-            ...user,
-            errors: { email: 'Email or password is incorrect!' },
-          };
-        })
-      );
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Api call
+        const response = await fetch(LOGIN_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: credential.email, password: credential.password })
+        });
+        const json = await response.json();
+        // console.log(json);
+        if(json){
+          updateUser(json)
+          setCredential(json)
+            localStorage.setItem("token", json.token);
+            history.push('/');
+        } 
+    }
 
   return (
     <main>
