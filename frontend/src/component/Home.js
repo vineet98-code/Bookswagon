@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import Posts from './Posts';
 import Banner from './Banner';
 import Tags from './Tags';
+import FeedNav from './FeedNav';
 import { BOOKS_URL } from '../utils/Constant';
 import UserContext from './UserContext';
 
@@ -20,19 +21,23 @@ export default function Home() {
   const [bookDetails, setBookDetails] = useState(bookDetailsInitialState);
 
 
-  const { bookPerPage, activePageIndex, activeTag, activeNav } = bookDetails
+  const { booksCount, bookPerPage, activePageIndex, activeTag, activeNav } = bookDetails
 
   let { user } = useContext(UserContext);
 
 
   useEffect(() => {
     const tag = activeTag;
+    const limit = bookPerPage;
+    const offset = activePageIndex * 10;
+    let token = user ? 'Token ' + user.token : '';
 
-    fetch(BOOKS_URL + (tag && `&tag=${tag}`),
+    fetch(BOOKS_URL + `/?limit=${limit}&offset=${offset}` + (tag && `&tag=${tag}`),
       {
         method: 'GET',
         headers: {
-          'Conten-Type': 'application/json',
+          'Content-Type': 'application/json',
+
         }
       })
       .then((res) => {
@@ -58,6 +63,16 @@ export default function Home() {
       );
   }, [activePageIndex, bookPerPage, user, activeTag, activeNav]);
 
+  const handleNavigation = (tab) => {
+    setBookDetails((bookDetails) => {
+      return {
+        ...bookDetails,
+        activeTag: '',
+        activeNav: tab,
+        activePageIndex: 0,
+      };
+    });
+  };
 
   const addTagTab = (tag) => {
     setBookDetails((bookDetails) => {
@@ -69,6 +84,7 @@ export default function Home() {
       };
     });
   };
+  
   
 
 return (
