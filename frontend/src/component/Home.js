@@ -6,33 +6,49 @@ import FeedNav from './FeedNav';
 import { BOOKS_URL } from '../utils/Constant';
 import UserContext from './UserContext';
 
-export default function Home() {
+const bookDetailsInitialState = {
+  books: null,
+  error: null,
+  booksCount: 0,
+  bookPerPage: 10,
+  activePageIndex: 0,
+  activeNav: 'global',
+  activeTag: '',
+};
 
-  const bookDetailsInitialState = {
-    books: null,
-    error: null,
-    booksCount: 0,
-    bookPerPage: 10,
-    activePageIndex: 0,
-    activeNav: 'global',
-    activeTag: '',
-  };
+export default function Home() {
+  
+  const [searchQuery, setSearchQuery] = useState('')
+
 
   const [bookDetails, setBookDetails] = useState(bookDetailsInitialState);
 
 
-  const { booksCount, bookPerPage, activePageIndex, activeTag, activeNav } = bookDetails
+  const { books, booksCount, bookPerPage, activePageIndex, activeTag, activeNav } = bookDetails
 
   let { user } = useContext(UserContext);
 
+  const getBook = () => {
+    if(searchQuery.length > 2){
+      
+      return books.filter((book) => {
+        const bookName = book.name.toLowerCase();
+        return bookName.includes(searchQuery)
+      })
+      
+    }
+    return books;
+  }
+   
 
   useEffect(() => {
     const tag = activeTag;
     const limit = bookPerPage;
     const offset = activePageIndex * 10;
     let token = user ? 'Token ' + user.token : '';
+    let feed = activeNav === 'your' ? '/feed' : '';
 
-    fetch(BOOKS_URL + `/?limit=${limit}&offset=${offset}` + (tag && `&tag=${tag}`),
+    fetch(BOOKS_URL + `/${feed}?limit=${limit}&offset=${offset}` + (tag && `&tag=${tag}`),
       {
         method: 'GET',
         headers: {
@@ -85,18 +101,16 @@ export default function Home() {
     });
   };
   
-  
-
 return (
     <main>
-      {/* <Banner  /> */}
+      <Banner setSearchQuery={setSearchQuery} searchQuery={searchQuery} />
       <div className="px-40">
         <div className="flex">
           <div className="w-3/12 ml-12 mt-9">
             <Tags addTagTab={addTagTab} activeNav={activeNav} />
           </div>
           <div className="w-8/12">
-            <Posts {...bookDetails} 
+            <Posts {...bookDetails} books={getBook()}
 
             /></div>
         </div>

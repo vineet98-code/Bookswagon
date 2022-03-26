@@ -9,8 +9,8 @@ import { useHistory } from 'react-router-dom'
 function Login(props) {
 
   const [credential, setCredential] = useState({
-    email:"username@gmail.com", 
-    password:"username1", 
+    email:"vineet98@gmail.com", 
+    password:"vinee98", 
     errors: {
     email: '',
     password: '',

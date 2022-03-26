@@ -2,11 +2,11 @@ import React, {useState} from 'react'
 import Loading from './Loading'
 import Post from './Post';
 
-
 function Posts(props) {
   
+const { books, error } = props
 
-  const { books, error } = props
+
 
 
 if (error) {
@@ -18,7 +18,7 @@ if (error) {
   return (
     <>
       <ul>
-        {books.map(book => <Post user={props.user} key={book.id} {...book} />)}
+        {books.map(book => <Post key={book.id} {...book} />)}
       </ul>
     </>
   )

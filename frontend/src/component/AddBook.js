@@ -38,9 +38,9 @@ function AddBook(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(credential.image)
-    const formdata = new FormData();
-    formdata.append('file', credential.image, credential.image.name)
+    // console.log(credential.image)
+    // const formdata = new FormData();
+    // formdata.append('file', credential.image, credential.image.name)
     fetchData();
   };
 
@@ -67,7 +67,8 @@ function AddBook(props) {
         return res.json();
       })
       .then((book) => {
-        setCredential({ name: '', description: '', price: '', writer: '', image: '', tagList: '' });
+        // console.log(book);
+        setCredential({ name: '', description: '', price: '', writer: '', image: '', tagList: '' }.concat(book));
         props.history.push('/'); // to access to the history use withRouter
       })
       .catch((errors) => {

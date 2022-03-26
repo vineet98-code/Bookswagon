@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom'
 
 function SignUp(props) {
 
-  const [credential, setCredential] = useState({ username: 'manu', email: "manu@gmail.com", password: "manu1",
+  const [credential, setCredential] = useState({ username: 'vineet', email: "vineet98@gmail.com", password: "vinee98",
     errors: {
       username:'',
       email: '',
@@ -44,10 +44,8 @@ function SignUp(props) {
         const user = await response.json();
         // console.log(json);
         if(user){
-          updateUser(user)
-          setCredential(user)
-            localStorage.setItem("token", user.token);
-            history.push('/');
+            localStorage.setItem("token", user.user.token);
+            history.push('/login');
         } 
         
     }

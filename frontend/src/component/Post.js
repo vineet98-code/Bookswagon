@@ -1,15 +1,14 @@
 import { Link } from 'react-router-dom';
-import React, { useState, useContext } from 'react';
-import UserContext from './UserContext';
+import React, { useState } from 'react';
 
 function Post(props) {
   const [error, setError] = useState(0)
 
-  const { user } = useContext(UserContext);
+  let { name, description, tagList, id, image } = props;
 
-  let { writer, name, description, tagList, id, image } = props;
   if (error)
     return <p className="text-3xl text-center mt-4 text-red-500">{error}</p>;
+    
   return (
     <section className="mt-10 shadow p-4 rounded">
       <div className="flex justify-between">

@@ -8,7 +8,7 @@ var bookSchema = new Schema({
     description : {type: String,  required: true},
     writer : {type: String,  required: true},
 
-    // author: { type: String, required: true },
+    author: { type: String, required: true },
     tagList: [{type: String}],
     price : {type: Number, required: true},
     image: {type: String},

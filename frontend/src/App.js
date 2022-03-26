@@ -10,8 +10,9 @@ import SingleBook from './component/SingleBook';
 import UserContext from './component/UserContext';
 import { LocalStorageKey, CURRENT_USER_URL } from './utils/Constant'
 import Setting from './component/Setting';
-import Profile from './component/Profile';
+// import Profile from './component/Profile';
 import AddBook from './component/AddBook';
+import Banner from './component/Banner';
 
 
 function App(props) {
@@ -19,6 +20,9 @@ function App(props) {
   const [user, setUser] = useState(null);
   const [isUserLogged, setIsUserLogged] = useState(false);
   const [userVerifying, setUserVerifying] = useState(false);
+
+  
+  
 
   useEffect(() => {
     let token = localStorage.getItem(LocalStorageKey);
@@ -52,6 +56,7 @@ function App(props) {
     setUserVerifying(true);
     localStorage.setItem(LocalStorageKey, user.token);
   };
+  
 
    if (userVerifying) {
     <Loader />
@@ -63,7 +68,7 @@ function App(props) {
         value={{ user: user, isUserLogged: isUserLogged, updateUser: updateUser, userVerifying: userVerifying }}>
 
         <Header />
-
+        
         {isUserLogged ? (
           <AuthenticatedApp />
         ) : (
@@ -92,9 +97,9 @@ function AuthenticatedApp(props) {
       <Route path="/setting">
         <Setting />
       </Route>
-      <Route path="/profile/:username" >
+      {/* <Route path="/profile/:username" >
         <Profile />
-      </Route>
+      </Route> */}
       <Route path="*">
         <NoMatch />
       </Route>
